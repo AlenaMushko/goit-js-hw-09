@@ -1,17 +1,31 @@
-{/* <button type="button" data-start>Start</button>
-<button type="button" data-stop>Stop</button>
-Напиши скрипт, який після натискання кнопки «Start», раз на 
-секунду змінює колір фону <body> на випадкове значення, 
-використовуючи інлайн стиль. Натисканням на кнопку «Stop» 
-зміна кольору фону повинна зупинятися.
-УВАГА
-Враховуй, що на кнопку «Start» можна натиснути нескінченну 
-кількість разів. Зроби так, щоб доки зміна теми запущена, 
-кнопка «Start» була неактивною (disabled). */}
+const refs = {
+  bodyColor: document.querySelector("body"),
+  buttonStart: document.querySelector('[data-start]'),
+  buttonStop: document.querySelector('[data-stop]'),
+}
+const PROMPT_DELAY = 1000;
+let onGetRandomHexColor = false;
 
+refs.bodyColor.style.backgroundColor = getRandomHexColor();
+refs.buttonStart.addEventListener('click', onClickStart);
+refs.buttonStop.addEventListener('click', onClickStop);
 
+let intervalId = 0
+function onClickStart() {
+  if ( onGetRandomHexColor ) { return;}
+  setInterval(() => {  
+    onGetRandomHexColor = true;
+   refs.bodyColor.style.backgroundColor = getRandomHexColor(); 
+  }, PROMPT_DELAY)
+    intervalId += 1;
+}
 
-// Для генерування випадкового кольору використовуй функцію 
+function onClickStop() {
+  clearInterval(intervalId);
+  onGetRandomHexColor = false;
+}
+
+// Для генерування випадкового кольору 
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 }
