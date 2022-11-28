@@ -15,36 +15,61 @@ const refs = {
 
 // }
 // }
-// const fp = flatpickr(inputEl, {
-//   enableTime: true,
-//   dateFormat: 'Y-m-d H:i',
-//   minDate: 'today',
-//   maxDate: '19.12.2022',
-    
-//   time_24hr: true,
+const fp = flatpickr(refs.inputEl, {
+  dateFormat: 'Y-m-d H:i',
+  minDate: 'today',
+  maxDate: '19.12.2022',
+  time_24hr: true,
 //   defaultDate: new Date(),
-//   minuteIncrement: 1,
-//   formatDate: (date, format, locale) => {
-//     // locale can also be used
-//     return moment(date).format(format);
-//   },
-//   // formatDate(dateObj, formatStr)#
-// // dateObj є датою та formatStrє рядком, що складається з маркерів форматування.
-// // Повернене значення Рядкове представлення dateObj, відформатований відповідно до formatStr
-//   onClose(selectedDates) {
-//     console.log(selectedDates[0]);
-// },
+// Встановлює початкові вибрані дати.
+// Якщо ви використовуєте mode: "multiple"календар діапазону , 
+// Arrayнадайте Dateоб’єкти або масив рядків дат, які слідують 
+// за вашим dateFormat.
+// В іншому випадку ви можете надати один об’єкт Date або рядок дати.
+  minuteIncrement: 1,
+//   Регулює крок для введення хвилин (включно з прокручуванням
+  altInput: true,
+  //   Покажіть користувачеві читабельну дату (відповідно до altFormat)
+  parseDate: (datestr, format) => {
+    return moment(datestr, format, true).toDate();
+  },
+// parseDate(dateStr, dateFormat)
+// Розбирає рядок дати або мітку часу та повертає дату
+// За бажанням передайте true як другий аргумент, щоб змусити 
+// активувати будь-які події onChange. І якщо ви передаєте рядок
+//  дати у форматі, відмінному від вашого dateFormat, надайте, 
+//  dateStrFormatнаприклад , "m/d/Y"
+  formatDate: (date, format, locale) => {
+    // locale can also be used
+    return moment(date).format(format);
+  },
+//   formatDate(dateObj, formatStr)
+// dateObj є датою та formatStrє рядком, що складається з маркерів 
+// форматування. Повернене значення Рядкове представлення dateObj, 
+// відформатований відповідно до formatStr
+onChange: function(selectedDates, dateStr, instance) {
+    //...
+},
+// onChange(){},
+// onChange запускається, коли користувач вибирає дату або змінює 
+// час у вибрану дату.
 
-// // Вибирати дату
-// // fp.selectedDates
-// });
+//   onClose: function(selectedDates, dateStr, instance){
+//    // ...
+// }
+onClose(selectedDates) {
+    console.log(selectedDates[0]);
+},
+// open()
+// Shows/opens the calendar
 
-  // altInput: true,
+// Вибирати дату
+// fp.selectedDates
+});
 
-  // allowInput: true,
-  // parseDate: (datestr, format) => {
-  //   return moment(datestr, format, true).toDate();
-  // },
+// залишок часу
+let t = Date.parse(endtime) - Date.parse(new Date());
+  
   
 
 
