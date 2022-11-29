@@ -11,80 +11,98 @@ const refs = {
   minutesEl: document.querySelector('span[data-minutes]'),
   secondsEl: document.querySelector('span[data-seconds]'),
 };
-
+const PROMPT_DELEY = 1000;
 let selectedTime = null;
+
 class Timer {
-// constructor{
+  constructor({ onTick }) {
+    this.intervalId = null;
+    this.isActive = false;
+    this.onTick = onTick;
+    this.init();
+  }
 
-// }
+  init() {
+    const time = this.convertMs(0);
+    this.onTick(time);
+  }
 
-faceTimer({ days, hours, minutes, seconds }) {
-    refs.daysEl.textContent = days;
-    refs.hoursEl.textContent = hours;
-    refs.minutesEl.textContent = minutes;
-    refs.secondsEl.textContent = seconds;
-  };
+  startTimer() {
+    if (this.isActive) {
+      return;
+    }
+
+    this.isActive = true;
+    this.intervalId = setInterval(() => {
+      const currentTime = Date.now();
+      // залишок часу
+      const deltaTime = selectedTime - currentTime;
+      const time = this.convertMs(deltaTime);
+      this.onTick(time);
+      if (deltaTime <= 0) {
+        //  Для остановки таймера используется функция clearInterval, которая
+        //  принимает уникальный номер того таймера, который нужно остановить.
+        clearInterval(this.intervalId);
+        this.isActive = false;
+        const time = this.convertMs(0);
+        this.onTick(time);
+      }
+    }, PROMPT_DELEY);
+  }
+
+  addLeadingZero(value) {
+    return String(value).padStart(2, '0');
+  }
+
+  convertMs(ms) {
+    // Number of milliseconds per unit of time
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+
+    // Remaining days
+    const days = addLeadingZero(Math.floor(ms / day));
+    // Remaining hours
+    const hours = addLeadingZero(Math.floor((ms % day) / hour));
+    // Remaining minutes
+    const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+    // Remaining seconds
+    const seconds = addLeadingZero(
+      Math.floor((((ms % day) % hour) % minute) / second)
+    );
+
+    return { days, hours, minutes, seconds };
+  }
 }
-const fp = flatpickr(refs.inputEl,{
+
+const options = flatpickr(refs.inputEl, {
   enableTime: true,
   time_24hr: true,
   defaultDate: Date.now(),
-  maxDate: '19.12.2022',
-  dateFormat: 'Y-m-d H:i',
+  // maxDate: '2022-12-19 00:00',
+  dateFormat: 'Y-m-d    H:i',
   minuteIncrement: 1,
   //   Регулює крок для введення хвилин (включно з прокручуванням
   onClose(selectedDates) {
     if (selectedDates[0] <= Date.now()) {
-        alert`Please choose a date in the future`;
-        // Notiflix.Notify.warning('Please choose a date in the future');
-        // selectedDates[0] = Date.now(); 
+      Notify.warning('Please choose a date in the future');
+      refs.btnStart.disabled = true;
     } else {
-        refs.btnStart.disabled = false;
-        selectedDates[0] = selectedTime;
+      refs.btnStart.disabled = false;
+      selectedDates[0] = selectedTime;
     }
+  },
+});
+
+
+const timer = new Timer({ onTick: faceTimer });
+// Функція bind()створює нову зв'язану функцію
+refs.btnStart.addEventListener('click', timer.startTimer.bind(timer));
+
+function faceTimer({ days, hours, minutes, seconds }) {
+  refs.daysEl.textContent = days;
+  refs.hoursEl.textContent = hours;
+  refs.minutesEl.textContent = minutes;
+  refs.secondsEl.textContent = seconds;
 }
-// onOpen() {
-//     console.log('bb');
-//   },
-//     // Shows opens the calendar
-})
-
-// const options = 
-
-
-// };
-
-
-function addLeadingZero(value) {
-  return String(value).padStart(2, '0');
-}
-
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-
-  // Remaining days
-  const days = addLeadingZero(Math.floor(ms / day));
-  // Remaining hours
-  const hours = addLeadingZero(Math.floor((ms % day) / hour));
-  // Remaining minutes
-  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
-  // Remaining seconds
-  const seconds = addLeadingZero(
-    Math.floor((((ms % day) % hour) % minute) / second)
-  );
-
-  return { days, hours, minutes, seconds };
-};
-
-
-
-// refs.btnStart.addEventListener('click', onClickBtnStartTimer);
-
-// function onClickBtnStartTimer() {
-//   // залишок часу
-//   let t = Date.parse(maxDate) - Date.parse(Date.now());
-// }
