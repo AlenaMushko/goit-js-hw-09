@@ -1,6 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import 'flatpickr/dist/themes/dark.css';
+import 'flatpickr/dist/themes/material_blue.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const refs = {
@@ -58,7 +58,7 @@ const options = flatpickr(refs.inputEl,  {
     if (selectedDates[0] <= Date.now()) {
       Notify.warning('Please choose a date in the future');
       refs.btnStart.disabled = true;
-      selectedTime = defaultDate;
+      selectedTime = Date.now();
     } else {
       refs.btnStart.disabled = false;
       selectedTime = selectedDates[0];

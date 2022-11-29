@@ -1,0 +1,26 @@
+.timer{
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+
+.field {
+ width: 90px;
+ height: 80px;
+ background-color: rgb(157, 220, 217);
+ border: 1px solid tomato;
+ border-radius: 0 15px;
+ padding: 7px;
+  display: flex;
+      flex-direction: column
+}
+
+.value{
+  color: rgb(131, 50, 10);
+  text-align: center;
+}
+
+body{
+  background-color: hsla(60, 100%, 50%, 0.3);
+}
