@@ -50,11 +50,7 @@ class Timer {
     }, PROMPT_DELEY);
   }
 
-  addLeadingZero(value) {
-    return String(value).padStart(2, '0');
-  }
-
-  convertMs(ms) {
+    convertMs(ms) {
     // Number of milliseconds per unit of time
     const second = 1000;
     const minute = second * 60;
@@ -62,17 +58,21 @@ class Timer {
     const day = hour * 24;
 
     // Remaining days
-    const days = addLeadingZero(Math.floor(ms / day));
+    const days = this.addLeadingZero(Math.floor(ms / day));
     // Remaining hours
-    const hours = addLeadingZero(Math.floor((ms % day) / hour));
+    const hours = this.addLeadingZero(Math.floor((ms % day) / hour));
     // Remaining minutes
-    const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+    const minutes = this.addLeadingZero(Math.floor(((ms % day) % hour) / minute));
     // Remaining seconds
-    const seconds = addLeadingZero(
+    const seconds = this.addLeadingZero(
       Math.floor((((ms % day) % hour) % minute) / second)
     );
 
     return { days, hours, minutes, seconds };
+  }
+
+  addLeadingZero(value) {
+    return String(value).padStart(2, '0');
   }
 }
 
