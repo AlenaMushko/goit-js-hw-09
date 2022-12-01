@@ -48,7 +48,7 @@ class Timer {
     refs.secondsEl.textContent = seconds;
   }
 }
-const options = flatpickr(refs.inputEl,  {
+const options = flatpickr(refs.inputEl, {
   enableTime: true,
   time_24hr: true,
   defaultDate: Date.now(),
