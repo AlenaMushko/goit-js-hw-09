@@ -2,7 +2,6 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/material_blue.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
 const refs = {
   inputEl: document.querySelector('#datetime-picker'),
   btnStart: document.querySelector('button[data-start]'),
@@ -18,12 +17,10 @@ class Timer {
     this.intervalId = null;
     this.isActive = false;
   }
-
   startTimer() {
     if (this.isActive) {
       return;
     }
-
     this.isActive = true;
     this.intervalId = setInterval(() => {
       const currentTime = Date.now();
@@ -31,7 +28,6 @@ class Timer {
       const deltaTime = selectedTime - currentTime;
       const time = convertMs(deltaTime);
       this.faceTimer(time);
-
       if (deltaTime <= 0) {
         //  Для остановки таймера используется функция clearInterval, которая
         //  принимает уникальный номер того таймера, который нужно остановить.
@@ -40,7 +36,6 @@ class Timer {
       }
     }, PROMPT_DELEY);
   }
-
   faceTimer({ days, hours, minutes, seconds }) {
     refs.daysEl.textContent = days;
     refs.hoursEl.textContent = hours;
@@ -69,14 +64,12 @@ const options = flatpickr(refs.inputEl, {
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
-
 function convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
-
   // Remaining days
   const days = addLeadingZero(Math.floor(ms / day));
   // Remaining hours
@@ -87,11 +80,8 @@ function convertMs(ms) {
   const seconds = addLeadingZero(
     Math.floor((((ms % day) % hour) % minute) / second)
   );
-
   return { days, hours, minutes, seconds };
 }
-
 const timer = new Timer();
-
 // Функція bind()створює нову зв'язану функцію
 refs.btnStart.addEventListener('click', timer.startTimer.bind(timer));
