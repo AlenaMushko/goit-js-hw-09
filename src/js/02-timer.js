@@ -27,13 +27,15 @@ class Timer {
       // залишок часу
       const deltaTime = selectedTime - currentTime;
       const time = convertMs(deltaTime);
-      this.faceTimer(time);
+     
       if (deltaTime <= 0) {
         //  Для остановки таймера используется функция clearInterval, которая
         //  принимает уникальный номер того таймера, который нужно остановить.
         clearInterval(this.intervalId);
         this.isActive = false;
+        return;
       }
+       this.faceTimer(time);
     }, PROMPT_DELEY);
   }
   faceTimer({ days, hours, minutes, seconds }) {
